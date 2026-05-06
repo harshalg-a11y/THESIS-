@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Your Threads</h2>
+<ul class="card-list">
+  {% for thread in threads %}
+  <li class="card">
+    <a href="/messages/{{ thread.id }}/">{{ thread.subject }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

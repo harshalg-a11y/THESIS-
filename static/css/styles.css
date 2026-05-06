@@ -1,0 +1,48 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  background: #f5f7fb;
+  color: #222;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: #1d1f4b;
+  color: white;
+}
+
+.navbar a { color: white; margin-left: 16px; text-decoration: none; }
+
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 20px;
+  background: #5e60ce;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.container { padding: 30px; }
+
+.card-list { list-style: none; padding: 0; }
+.card {
+  background: white;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.chat-box {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}

@@ -1,0 +1,14 @@
+<nav class="navbar">
+  <div class="logo">ThesisPortal</div>
+  <div>
+    <a href="/">Home</a>
+    {% if user.is_authenticated %}
+      <a href="/accounts/dashboard/">Dashboard</a>
+      <a href="/messages/">Messages</a>
+      <a href="/accounts/logout/">Logout</a>
+    {% else %}
+      <a href="/accounts/login/">Login</a>
+      <a href="/accounts/register/">Register</a>
+    {% endif %}
+  </div>
+</nav>
