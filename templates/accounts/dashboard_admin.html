@@ -1,11 +1,66 @@
 {% extends "base.html" %}
+{% block title %}Admin Dashboard — Thesis Portal{% endblock %}
 {% block content %}
-<div class="card">
-  <h2>Admin Dashboard</h2>
-  <p>Full control over users, data, and analytics.</p>
+
+<div class="page-header fade-in">
+  <h2><i class="fa-solid fa-shield-halved" style="margin-right:10px;font-size:1.4rem;"></i>Admin Dashboard</h2>
   <div class="actions">
-    <a class="btn" href="/admin/">Admin Panel</a>
-    <a class="btn ghost" href="/analytics/">Analytics</a>
+    <a class="btn" href="/admin/"><i class="fa-solid fa-cog"></i> Admin Panel</a>
+    <a class="btn ghost" href="/analytics/"><i class="fa-solid fa-chart-line"></i> Analytics</a>
   </div>
 </div>
+
+<div class="dash-stats fade-in delay-1">
+  <div class="dash-stat">
+    <div class="ds-num">—</div>
+    <div class="ds-label">Total Users</div>
+  </div>
+  <div class="dash-stat">
+    <div class="ds-num">—</div>
+    <div class="ds-label">Active Requests</div>
+  </div>
+  <div class="dash-stat">
+    <div class="ds-num">—</div>
+    <div class="ds-label">Total Messages</div>
+  </div>
+  <div class="dash-stat">
+    <div class="ds-num">—</div>
+    <div class="ds-label">Payments</div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card fade-in delay-2">
+    <h3><i class="fa-solid fa-users" style="margin-right:8px;"></i>User Management</h3>
+    <p>View, edit, and manage all registered users — clients and writers.</p>
+    <div class="actions">
+      <a class="btn" href="/admin/"><i class="fa-solid fa-user-gear"></i> Manage Users</a>
+    </div>
+  </div>
+
+  <div class="card fade-in delay-3">
+    <h3><i class="fa-solid fa-chart-bar" style="margin-right:8px;"></i>Analytics</h3>
+    <p>Deep dive into platform usage, request stats, and revenue analytics.</p>
+    <div class="actions">
+      <a class="btn" href="/analytics/"><i class="fa-solid fa-chart-line"></i> View Analytics</a>
+    </div>
+  </div>
+
+  <div class="card fade-in delay-4">
+    <h3><i class="fa-solid fa-file-lines" style="margin-right:8px;"></i>All Requests</h3>
+    <p>Monitor all thesis requests across every client and writer.</p>
+    <div class="actions">
+      <a class="btn ghost" href="/requests/"><i class="fa-solid fa-list"></i> View All</a>
+    </div>
+  </div>
+
+  <div class="card fade-in delay-5">
+    <h3><i class="fa-solid fa-credit-card" style="margin-right:8px;"></i>Payments</h3>
+    <p>Track all transactions, invoices, and payment statuses.</p>
+    <div class="actions">
+      <a class="btn ghost" href="/payments/"><i class="fa-solid fa-money-bill"></i> View Payments</a>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

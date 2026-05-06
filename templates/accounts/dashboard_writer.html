@@ -1,11 +1,62 @@
 {% extends "base.html" %}
+{% block title %}Writer Dashboard — Thesis Portal{% endblock %}
 {% block content %}
-<div class="card">
-  <h2>Writer Dashboard</h2>
-  <p>Manage milestones, uploads, and communicate with clients.</p>
+
+<div class="page-header fade-in">
+  <h2><i class="fa-solid fa-pen-nib" style="margin-right:10px;font-size:1.4rem;"></i>Writer Dashboard</h2>
   <div class="actions">
-    <a class="btn" href="/requests/">View Requests</a>
-    <a class="btn ghost" href="/messages/">Messages</a>
+    <a class="btn" href="/requests/"><i class="fa-solid fa-list-check"></i> View Requests</a>
+    <a class="btn ghost" href="/messages/"><i class="fa-solid fa-comments"></i> Messages</a>
   </div>
 </div>
+
+<div class="dash-stats fade-in delay-1">
+  <div class="dash-stat">
+    <div class="ds-num">—</div>
+    <div class="ds-label">Assigned Jobs</div>
+  </div>
+  <div class="dash-stat">
+    <div class="ds-num">—</div>
+    <div class="ds-label">Pending Milestones</div>
+  </div>
+  <div class="dash-stat">
+    <div class="ds-num">—</div>
+    <div class="ds-label">Unread Messages</div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card fade-in delay-2">
+    <h3><i class="fa-solid fa-briefcase" style="margin-right:8px;"></i>Active Projects</h3>
+    <p>Manage your current thesis writing assignments and track progress.</p>
+    <div class="actions">
+      <a class="btn" href="/requests/"><i class="fa-solid fa-list"></i> View All</a>
+    </div>
+  </div>
+
+  <div class="card fade-in delay-3">
+    <h3><i class="fa-solid fa-comments" style="margin-right:8px;"></i>Client Messages</h3>
+    <p>Communicate with your clients to clarify requirements and share updates.</p>
+    <div class="actions">
+      <a class="btn" href="/messages/"><i class="fa-solid fa-inbox"></i> Open Inbox</a>
+    </div>
+  </div>
+
+  <div class="card fade-in delay-4">
+    <h3><i class="fa-solid fa-flag-checkered" style="margin-right:8px;"></i>Milestones</h3>
+    <p>Review and update milestones to keep projects on track.</p>
+    <div class="actions">
+      <a class="btn ghost" href="/requests/"><i class="fa-solid fa-tasks"></i> View Milestones</a>
+    </div>
+  </div>
+
+  <div class="card fade-in delay-5">
+    <h3><i class="fa-solid fa-bell" style="margin-right:8px;"></i>Notifications</h3>
+    <p>Check the latest updates and alerts from your clients.</p>
+    <div class="actions">
+      <a class="btn ghost" href="/notifications/"><i class="fa-solid fa-bell"></i> View All</a>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

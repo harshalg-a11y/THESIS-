@@ -1,10 +1,113 @@
 {% extends "base.html" %}
-{% block content %}
-<div class="card">
-  <h2>Register</h2>
-  <form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn" type="submit">Create Account</button>
-  </form>
+{% block title %}Create Account — Thesis Portal{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="/static/css/auth.css">{% endblock %}
+
+{% block full_content %}
+<div class="auth-page">
+
+  <!-- Left panel -->
+  <div class="auth-panel">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="auth-panel-content">
+      <div class="auth-brand">
+        <i class="fa-solid fa-graduation-cap"></i> ThesisPortal
+      </div>
+
+      <h2>
+        Join thousands of<br>
+        students &amp; writers<br>
+        <span class="highlight">getting it done.</span>
+      </h2>
+      <p>
+        Create your free account in seconds and start collaborating
+        on academic work that actually gets delivered.
+      </p>
+
+      <ul class="auth-features">
+        <li><span class="feat-icon">🚀</span> Free to sign up, no credit card needed</li>
+        <li><span class="feat-icon">🤝</span> Match with verified expert writers</li>
+        <li><span class="feat-icon">🔒</span> Secure, encrypted file sharing</li>
+        <li><span class="feat-icon">⚡</span> Get started in under 2 minutes</li>
+      </ul>
+
+      <div class="auth-quote">
+        <p>"I got paired with an amazing writer within hours. The whole process felt effortless."</p>
+        <div class="quote-author">— Aiden K., Masters Student</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right form panel -->
+  <div class="auth-form-panel">
+    <div class="auth-form-wrap">
+
+      <div class="auth-form-header">
+        <span class="eyebrow">New account</span>
+        <h1>Create your<br>free account</h1>
+        <p>Already have one? <a href="/accounts/login/" style="color:var(--primary-lt);font-weight:700;text-decoration:none;">Sign in →</a></p>
+      </div>
+
+      {% if form.non_field_errors %}
+        <div class="non-field-errors">
+          {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="auth-progress"><div class="auth-progress-bar"></div></div>
+
+      <form method="post" class="auth-submit-form">
+        {% csrf_token %}
+
+        {% for field in form %}
+          <div class="auth-field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            <div class="input-wrap" style="position:relative;">
+              {% if field.field.widget.input_type == "select" %}
+                {{ field }}
+              {% else %}
+                <input
+                  type="{{ field.field.widget.input_type }}"
+                  id="{{ field.id_for_label }}"
+                  name="{{ field.html_name }}"
+                  placeholder="{{ field.label }}"
+                  value="{{ field.value|default:'' }}"
+                  {% if field.field.required %}required{% endif %}
+                >
+                {% if field.field.widget.input_type == "password" %}
+                  <i class="fa-solid fa-lock input-icon"></i>
+                  <button type="button" class="pwd-toggle"><i class="fa-solid fa-eye"></i></button>
+                {% elif field.html_name == "username" %}
+                  <i class="fa-solid fa-user input-icon"></i>
+                {% elif field.html_name == "email" %}
+                  <i class="fa-solid fa-envelope input-icon"></i>
+                {% else %}
+                  <i class="fa-solid fa-pen input-icon"></i>
+                {% endif %}
+              {% endif %}
+            </div>
+            {% for error in field.errors %}<div class="field-error"><i class="fa-solid fa-circle-exclamation"></i> {{ error }}</div>{% endfor %}
+          </div>
+        {% endfor %}
+
+        <div style="margin-bottom:22px;">
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text-muted);font-weight:600;cursor:pointer;">
+            <input type="checkbox" required style="width:16px;height:16px;accent-color:var(--primary);">
+            I agree to the <a href="#" style="color:var(--primary-lt);">Terms of Service</a> &amp; <a href="#" style="color:var(--primary-lt);">Privacy Policy</a>
+          </label>
+        </div>
+
+        <button class="auth-submit" type="submit">
+          <i class="fa-solid fa-user-plus" style="margin-right:8px;"></i>
+          Create Account
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="/accounts/login/">Sign in</a>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
