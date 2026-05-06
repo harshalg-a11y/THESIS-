@@ -1,11 +1,28 @@
 {% extends "base.html" %}
+{% block title %}Client Dashboard — Thesis Portal{% endblock %}
 {% block content %}
-<div class="card">
-  <h2>Client Dashboard</h2>
-  <p>Start new requests, track status, and chat with your writer.</p>
-  <div class="actions">
-    <a class="btn" href="/requests/new/">New Request</a>
+<div class="dashboard-welcome">
+  <h2>Welcome back, {{ user.get_full_name|default:user.username }} 👋</h2>
+  <p>Track your thesis requests, communicate with your writer, and stay on top of deadlines.</p>
+  <div class="quick-actions">
+    <a class="btn" href="/requests/new/">+ New Request</a>
     <a class="btn ghost" href="/messages/">Messages</a>
+    <a class="btn ghost" href="/requests/">My Requests</a>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="stat">
+    <div class="stat-label">Active Requests</div>
+    <strong>—</strong>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Unread Messages</div>
+    <strong>—</strong>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Notifications</div>
+    <strong>—</strong>
   </div>
 </div>
 {% endblock %}

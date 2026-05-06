@@ -1,13 +1,30 @@
 {% extends "base.html" %}
+{% block title %}Messages — Thesis Portal{% endblock %}
 {% block content %}
-<h2>Your Threads</h2>
+<div class="section-row">
+  <div class="page-header" style="margin-bottom:0">
+    <h2>Messages</h2>
+    <p>Your conversations</p>
+  </div>
+  <a class="btn sm" href="/messages/new/">+ New Thread</a>
+</div>
+
 <div class="card-list">
   {% for thread in threads %}
-  <div class="card">
-    <a href="/messages/{{ thread.id }}/">{{ thread.subject }}</a>
-  </div>
+  <a class="thread-item" href="/messages/{{ thread.id }}/">
+    <div class="thread-avatar">{{ thread.subject|first|upper }}</div>
+    <div class="thread-info">
+      <div class="thread-subject">{{ thread.subject }}</div>
+      <div class="thread-meta">Thread #{{ thread.id }}</div>
+    </div>
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--text-light);flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+  </a>
   {% empty %}
-  <div class="card">No threads yet.</div>
+  <div class="empty-state">
+    <div class="empty-icon">💬</div>
+    <p>No threads yet. Start a new conversation!</p>
+    <a class="btn" href="/messages/new/" style="margin-top:16px">Start Conversation</a>
+  </div>
   {% endfor %}
 </div>
 {% endblock %}

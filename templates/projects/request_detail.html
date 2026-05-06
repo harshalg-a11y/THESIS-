@@ -1,46 +1,67 @@
 {% extends "base.html" %}
+{% block title %}{{ request_item.title }} — Thesis Portal{% endblock %}
 {% block content %}
-<div class="card">
-  <h2>{{ request_item.title }}</h2>
-  <p>{{ request_item.description }}</p>
-  <p><strong>Status:</strong> {{ request_item.get_status_display }}</p>
-  <p><strong>Budget:</strong> {{ request_item.budget }}</p>
-  <p><strong>Deadline:</strong> {{ request_item.deadline }}</p>
+<div class="section-row">
+  <div class="page-header" style="margin-bottom:0">
+    <h2>{{ request_item.title }}</h2>
+    <div style="display:flex; gap:12px; align-items:center; margin-top:8px; flex-wrap:wrap;">
+      <span class="badge badge-purple">{{ request_item.get_status_display }}</span>
+      {% if request_item.deadline %}<span style="font-size:.82rem;color:var(--text-muted)">📅 {{ request_item.deadline }}</span>{% endif %}
+      {% if request_item.budget %}<span style="font-size:.82rem;color:var(--text-muted)">💰 {{ request_item.budget }}</span>{% endif %}
+    </div>
+  </div>
+  <a class="btn ghost sm" href="/requests/">← All Requests</a>
+</div>
 
-  <form method="post">{% csrf_token %}
+<div class="card" style="margin-bottom:24px">
+  <p style="font-size:.95rem; line-height:1.7; color:var(--text);">{{ request_item.description }}</p>
+
+  <form method="post" style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border);">
+    {% csrf_token %}
     {{ status_form.as_p }}
-    <button class="btn" name="update_status">Update Status</button>
+    <button class="btn sm" name="update_status">Update Status</button>
   </form>
 </div>
 
-<div class="grid">
+<div class="grid-2">
   <div class="card">
-    <h3>Milestones</h3>
-    <ul>
+    <h3 style="margin-bottom:16px">📌 Milestones</h3>
+    <ul style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px;">
       {% for milestone in request_item.milestones.all %}
-        <li>{{ milestone.title }} - {{ milestone.due_date }} {% if milestone.is_completed %}(Done){% endif %}</li>
+        <li style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:var(--surface-2); border-radius:var(--radius-sm); font-size:.875rem;">
+          <span>{{ milestone.title }}</span>
+          <span style="color:var(--text-muted); font-size:.8rem;">
+            {{ milestone.due_date }}
+            {% if milestone.is_completed %}<span class="badge badge-green" style="margin-left:8px">Done</span>{% endif %}
+          </span>
+        </li>
       {% empty %}
-        <li>No milestones yet.</li>
+        <li style="color:var(--text-muted); font-size:.875rem; text-align:center; padding:16px 0;">No milestones yet.</li>
       {% endfor %}
     </ul>
-    <form method="post">{% csrf_token %}
+    <form method="post" style="padding-top:16px; border-top:1px solid var(--border);">
+      {% csrf_token %}
       {{ milestone_form.as_p }}
-      <button class="btn" name="add_milestone">Add Milestone</button>
+      <button class="btn sm" name="add_milestone">Add Milestone</button>
     </form>
   </div>
 
   <div class="card">
-    <h3>Attachments</h3>
-    <ul>
+    <h3 style="margin-bottom:16px">📎 Attachments</h3>
+    <ul style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px;">
       {% for attachment in request_item.attachments.all %}
-        <li><a href="{{ attachment.file.url }}">{{ attachment.file.name }}</a></li>
+        <li style="display:flex; align-items:center; gap:8px; padding:10px 14px; background:var(--surface-2); border-radius:var(--radius-sm); font-size:.875rem;">
+          <span>📄</span>
+          <a href="{{ attachment.file.url }}" style="color:var(--primary); font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ attachment.file.name }}</a>
+        </li>
       {% empty %}
-        <li>No files yet.</li>
+        <li style="color:var(--text-muted); font-size:.875rem; text-align:center; padding:16px 0;">No files yet.</li>
       {% endfor %}
     </ul>
-    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+    <form method="post" enctype="multipart/form-data" style="padding-top:16px; border-top:1px solid var(--border);">
+      {% csrf_token %}
       {{ attachment_form.as_p }}
-      <button class="btn" name="add_attachment">Upload</button>
+      <button class="btn sm" name="add_attachment">Upload File</button>
     </form>
   </div>
 </div>

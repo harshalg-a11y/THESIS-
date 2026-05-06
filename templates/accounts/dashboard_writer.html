@@ -1,11 +1,28 @@
 {% extends "base.html" %}
+{% block title %}Writer Dashboard — Thesis Portal{% endblock %}
 {% block content %}
-<div class="card">
-  <h2>Writer Dashboard</h2>
-  <p>Manage milestones, uploads, and communicate with clients.</p>
-  <div class="actions">
-    <a class="btn" href="/requests/">View Requests</a>
+<div class="dashboard-welcome">
+  <h2>Writer Dashboard ✍️</h2>
+  <p>Manage your active assignments, upload deliverables, and communicate with clients.</p>
+  <div class="quick-actions">
+    <a class="btn" href="/requests/">View Assignments</a>
     <a class="btn ghost" href="/messages/">Messages</a>
+    <a class="btn ghost" href="/accounts/profile/">My Profile</a>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="stat">
+    <div class="stat-label">Active Jobs</div>
+    <strong>—</strong>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Unread Messages</div>
+    <strong>—</strong>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Pending Milestones</div>
+    <strong>—</strong>
   </div>
 </div>
 {% endblock %}

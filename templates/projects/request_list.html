@@ -1,20 +1,39 @@
 {% extends "base.html" %}
+{% block title %}Thesis Requests — Thesis Portal{% endblock %}
 {% block content %}
-<h2>Thesis Requests</h2>
-<div class="actions">
+<div class="section-row">
+  <div class="page-header" style="margin-bottom:0">
+    <h2>Thesis Requests</h2>
+    <p>All active and past requests</p>
+  </div>
   {% if user.role == "client" %}
-    <a class="btn" href="/requests/new/">New Request</a>
+    <a class="btn" href="/requests/new/">+ New Request</a>
   {% endif %}
 </div>
+
 <div class="card-list">
   {% for item in requests %}
-  <div class="card">
-    <h3>{{ item.title }}</h3>
-    <p>Status: {{ item.get_status_display }}</p>
-    <a class="btn ghost" href="/requests/{{ item.id }}/">View</a>
+  <div class="request-card">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">
+      <h3>{{ item.title }}</h3>
+      <span class="badge badge-purple">{{ item.get_status_display }}</span>
+    </div>
+    <div class="request-meta">
+      {% if item.deadline %}<span>📅 {{ item.deadline }}</span>{% endif %}
+      {% if item.budget %}<span>💰 {{ item.budget }}</span>{% endif %}
+    </div>
+    <div class="request-actions">
+      <a class="btn ghost sm" href="/requests/{{ item.id }}/">View Details →</a>
+    </div>
   </div>
   {% empty %}
-  <div class="card">No requests yet.</div>
+  <div class="empty-state">
+    <div class="empty-icon">📄</div>
+    <p>No requests yet.{% if user.role == "client" %} Create your first thesis request to get started.{% endif %}</p>
+    {% if user.role == "client" %}
+      <a class="btn" href="/requests/new/" style="margin-top:16px">Create Request</a>
+    {% endif %}
+  </div>
   {% endfor %}
 </div>
 {% endblock %}

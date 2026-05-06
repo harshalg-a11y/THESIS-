@@ -1,10 +1,18 @@
 {% extends "base.html" %}
+{% block title %}New Thread — Thesis Portal{% endblock %}
 {% block content %}
-<div class="card">
-  <h2>Start a New Thread</h2>
-  <form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn">Create</button>
-  </form>
+<div class="form-wrapper" style="max-width: 560px;">
+  <div class="form-card">
+    <h2>Start a New Thread</h2>
+    <p class="form-subtitle">Begin a new conversation with a team member</p>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="form-actions">
+        <button class="btn">Create Thread</button>
+      </div>
+    </form>
+    <p class="form-footer"><a href="/messages/">← Back to Messages</a></p>
+  </div>
 </div>
 {% endblock %}

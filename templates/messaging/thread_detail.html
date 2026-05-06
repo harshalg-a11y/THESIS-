@@ -1,15 +1,37 @@
 {% extends "base.html" %}
+{% block title %}{{ thread.subject }} — Messages{% endblock %}
 {% block content %}
-<h2>{{ thread.subject }}</h2>
-<div class="chat-box" data-thread-id="{{ thread.id }}">
-  {% for msg in messages %}
-    <div class="chat-msg">
-      <strong>{{ msg.sender.username }}:</strong> {{ msg.content }}
-    </div>
-  {% endfor %}
+<div class="section-row">
+  <div class="page-header" style="margin-bottom:0">
+    <h2>{{ thread.subject }}</h2>
+    <p>Thread #{{ thread.id }}</p>
+  </div>
+  <a class="btn ghost sm" href="/messages/">← All Threads</a>
 </div>
-<form method="post">{% csrf_token %}
-  {{ form.as_p }}
-  <button class="btn">Send</button>
-</form>
+
+<div class="chat-layout">
+  <div class="chat-box" id="chatBox" data-thread-id="{{ thread.id }}">
+    {% for msg in messages %}
+      <div class="chat-msg {% if msg.sender == request.user %}me{% endif %}">
+        <span class="msg-sender">{{ msg.sender.username }}</span>
+        <div class="msg-bubble">{{ msg.content }}</div>
+      </div>
+    {% empty %}
+      <div class="empty-state">
+        <div class="empty-icon">💬</div>
+        <p>No messages yet. Say hello!</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <form method="post" class="chat-form" id="chatForm">
+    {% csrf_token %}
+    {% for field in form %}
+      {% if field.name == "content" %}
+        <textarea name="content" placeholder="Type a message…" rows="1" id="chatInput" required>{{ field.value|default:"" }}</textarea>
+      {% endif %}
+    {% endfor %}
+    <button class="btn" type="submit">Send</button>
+  </form>
+</div>
 {% endblock %}

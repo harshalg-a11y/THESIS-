@@ -1,10 +1,17 @@
 {% extends "base.html" %}
+{% block title %}My Profile — Thesis Portal{% endblock %}
 {% block content %}
-<div class="card">
-  <h2>Profile</h2>
-  <form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn">Save Profile</button>
-  </form>
+<div class="form-wrapper" style="max-width: 560px;">
+  <div class="form-card">
+    <h2>My Profile</h2>
+    <p class="form-subtitle">Update your personal information and settings</p>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="form-actions">
+        <button class="btn">Save Changes</button>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}
