@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Writer Dashboard</h2>
-<p>Manage your client communications and thesis details.</p>
-<a class="btn" href="/messages/">View Threads</a>
+<div class="card">
+  <h2>Writer Dashboard</h2>
+  <p>Manage milestones, uploads, and communicate with clients.</p>
+  <div class="actions">
+    <a class="btn" href="/requests/">View Requests</a>
+    <a class="btn ghost" href="/messages/">Messages</a>
+  </div>
+</div>
 {% endblock %}

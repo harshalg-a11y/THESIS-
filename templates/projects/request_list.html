@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Thesis Requests</h2>
+<div class="actions">
+  {% if user.role == "client" %}
+    <a class="btn" href="/requests/new/">New Request</a>
+  {% endif %}
+</div>
+<div class="card-list">
+  {% for item in requests %}
+  <div class="card">
+    <h3>{{ item.title }}</h3>
+    <p>Status: {{ item.get_status_display }}</p>
+    <a class="btn ghost" href="/requests/{{ item.id }}/">View</a>
+  </div>
+  {% empty %}
+  <div class="card">No requests yet.</div>
+  {% endfor %}
+</div>
+{% endblock %}

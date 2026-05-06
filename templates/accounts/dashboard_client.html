@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Client Dashboard</h2>
-<p>Welcome! Start a new thesis request or message a writer.</p>
-<a class="btn" href="/messages/new/">Start New Thread</a>
+<div class="card">
+  <h2>Client Dashboard</h2>
+  <p>Start new requests, track status, and chat with your writer.</p>
+  <div class="actions">
+    <a class="btn" href="/requests/new/">New Request</a>
+    <a class="btn ghost" href="/messages/">Messages</a>
+  </div>
+</div>
 {% endblock %}

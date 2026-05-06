@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>{{ thread.subject }}</h2>
-<div class="chat-box">
+<div class="chat-box" data-thread-id="{{ thread.id }}">
   {% for msg in messages %}
     <div class="chat-msg">
       <strong>{{ msg.sender.username }}:</strong> {{ msg.content }}

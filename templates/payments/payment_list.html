@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Payments</h2>
+<div class="card-list">
+  {% for payment in payments %}
+    <div class="card">
+      <h4>{{ payment.request.title }}</h4>
+      <p>Amount: {{ payment.amount }}</p>
+      <p>Status: {{ payment.get_status_display }}</p>
+    </div>
+  {% empty %}
+    <div class="card">No payments yet.</div>
+  {% endfor %}
+</div>
+{% endblock %}

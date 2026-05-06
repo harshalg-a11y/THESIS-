@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>{{ request_item.title }}</h2>
+  <p>{{ request_item.description }}</p>
+  <p><strong>Status:</strong> {{ request_item.get_status_display }}</p>
+  <p><strong>Budget:</strong> {{ request_item.budget }}</p>
+  <p><strong>Deadline:</strong> {{ request_item.deadline }}</p>
+
+  <form method="post">{% csrf_token %}
+    {{ status_form.as_p }}
+    <button class="btn" name="update_status">Update Status</button>
+  </form>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h3>Milestones</h3>
+    <ul>
+      {% for milestone in request_item.milestones.all %}
+        <li>{{ milestone.title }} - {{ milestone.due_date }} {% if milestone.is_completed %}(Done){% endif %}</li>
+      {% empty %}
+        <li>No milestones yet.</li>
+      {% endfor %}
+    </ul>
+    <form method="post">{% csrf_token %}
+      {{ milestone_form.as_p }}
+      <button class="btn" name="add_milestone">Add Milestone</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>Attachments</h3>
+    <ul>
+      {% for attachment in request_item.attachments.all %}
+        <li><a href="{{ attachment.file.url }}">{{ attachment.file.name }}</a></li>
+      {% empty %}
+        <li>No files yet.</li>
+      {% endfor %}
+    </ul>
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+      {{ attachment_form.as_p }}
+      <button class="btn" name="add_attachment">Upload</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

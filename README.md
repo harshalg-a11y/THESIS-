@@ -1,10 +1,14 @@
 # Thesis Portal
 
-A multi-portal thesis website with:
+A feature-rich multi-portal thesis website with:
 - Client portal
 - Writer portal
 - Admin portal
 - Client–Writer messaging
+- Thesis requests & milestones
+- File uploads
+- Notifications
+- Analytics dashboard
 
 ## Setup
 

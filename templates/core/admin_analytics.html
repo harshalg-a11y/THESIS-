@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Admin Analytics</h2>
+<div class="grid">
+  <div class="stat">Users<br><strong>{{ users }}</strong></div>
+  <div class="stat">Clients<br><strong>{{ clients }}</strong></div>
+  <div class="stat">Writers<br><strong>{{ writers }}</strong></div>
+  <div class="stat">Requests<br><strong>{{ requests }}</strong></div>
+  <div class="stat">Messages<br><strong>{{ messages }}</strong></div>
+</div>
+{% endblock %}

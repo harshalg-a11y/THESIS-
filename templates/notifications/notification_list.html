@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Notifications</h2>
+<div class="card-list">
+  {% for note in notifications %}
+    <div class="card {% if not note.is_read %}highlight{% endif %}">
+      <h4>{{ note.title }}</h4>
+      <p>{{ note.body }}</p>
+      <a class="btn ghost" href="/notifications/{{ note.id }}/read/">Mark Read</a>
+    </div>
+  {% empty %}
+    <div class="card">No notifications.</div>
+  {% endfor %}
+</div>
+{% endblock %}

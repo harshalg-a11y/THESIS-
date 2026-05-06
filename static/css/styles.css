@@ -1,23 +1,55 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Manrope", sans-serif;
   margin: 0;
-  background: #f5f7fb;
-  color: #222;
+  background: radial-gradient(circle at top, #eef1ff, #f7f8fb 60%);
+  color: #141414;
 }
 
 .navbar {
   display: flex;
   justify-content: space-between;
-  padding: 16px 32px;
-  background: #1d1f4b;
+  align-items: center;
+  padding: 16px 40px;
+  background: rgba(29, 31, 75, 0.9);
   color: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.navbar a { color: white; margin-left: 16px; text-decoration: none; }
+.logo {
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.nav-links a {
+  color: white;
+  margin-left: 18px;
+  text-decoration: none;
+  font-weight: 500;
+}
 
 .hero {
-  text-align: center;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 32px;
+  align-items: center;
   padding: 80px 20px;
+}
+
+.hero-card {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.hero-actions .btn {
+  margin-right: 12px;
 }
 
 .btn {
@@ -26,23 +58,68 @@ body {
   padding: 10px 20px;
   background: #5e60ce;
   color: white;
-  border-radius: 8px;
+  border-radius: 10px;
   text-decoration: none;
+  border: none;
+  cursor: pointer;
 }
 
-.container { padding: 30px; }
+.btn.ghost {
+  background: transparent;
+  border: 2px solid #5e60ce;
+  color: #5e60ce;
+}
 
-.card-list { list-style: none; padding: 0; }
+.container { padding: 30px 40px; }
+
+.card-list { display: grid; gap: 16px; }
+
 .card {
   background: white;
-  margin-bottom: 12px;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.card.highlight {
+  border: 2px solid #5e60ce;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.stat {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
 }
 
 .chat-box {
   background: white;
   padding: 16px;
-  border-radius: 8px;
+  border-radius: 12px;
   margin-bottom: 12px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.chat-msg {
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+  .navbar {
+    flex-direction: column;
+    gap: 12px;
+  }
 }
