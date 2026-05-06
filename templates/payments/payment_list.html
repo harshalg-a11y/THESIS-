@@ -1,15 +1,27 @@
 {% extends "base.html" %}
+{% block title %}Payments — Thesis Portal{% endblock %}
 {% block content %}
-<h2>Payments</h2>
+<div class="page-header">
+  <h2>Payments</h2>
+  <p>Track all payment activity for your requests</p>
+</div>
+
 <div class="card-list">
   {% for payment in payments %}
-    <div class="card">
-      <h4>{{ payment.request.title }}</h4>
-      <p>Amount: {{ payment.amount }}</p>
-      <p>Status: {{ payment.get_status_display }}</p>
+    <div class="payment-card">
+      <div>
+        <h4 style="margin-bottom:4px">{{ payment.request.title }}</h4>
+        <span class="badge {% if payment.get_status_display == 'Paid' %}badge-green{% elif payment.get_status_display == 'Pending' %}badge-orange{% else %}badge-red{% endif %}">
+          {{ payment.get_status_display }}
+        </span>
+      </div>
+      <div class="payment-amount">{{ payment.amount }}</div>
     </div>
   {% empty %}
-    <div class="card">No payments yet.</div>
+    <div class="empty-state">
+      <div class="empty-icon">💳</div>
+      <p>No payment records yet.</p>
+    </div>
   {% endfor %}
 </div>
 {% endblock %}

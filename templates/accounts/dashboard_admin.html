@@ -1,11 +1,32 @@
 {% extends "base.html" %}
+{% block title %}Admin Dashboard — Thesis Portal{% endblock %}
 {% block content %}
-<div class="card">
-  <h2>Admin Dashboard</h2>
-  <p>Full control over users, data, and analytics.</p>
-  <div class="actions">
+<div class="dashboard-welcome">
+  <h2>Admin Dashboard ⚙️</h2>
+  <p>Full control over users, requests, and platform analytics.</p>
+  <div class="quick-actions">
     <a class="btn" href="/admin/">Admin Panel</a>
     <a class="btn ghost" href="/analytics/">Analytics</a>
+    <a class="btn ghost" href="/requests/">All Requests</a>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="stat">
+    <div class="stat-label">Total Users</div>
+    <strong>—</strong>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Active Requests</div>
+    <strong>—</strong>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Total Messages</div>
+    <strong>—</strong>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Revenue</div>
+    <strong>—</strong>
   </div>
 </div>
 {% endblock %}

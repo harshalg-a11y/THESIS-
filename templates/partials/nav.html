@@ -1,6 +1,6 @@
 <nav class="navbar">
-  <div class="logo">ThesisPortal</div>
-  <div class="nav-links">
+  <a href="/" class="logo">ThesisPortal</a>
+  <div class="nav-links" id="navLinks">
     <a href="/">Home</a>
     {% if user.is_authenticated %}
       <a href="/accounts/dashboard/">Dashboard</a>
@@ -11,10 +11,18 @@
       {% if user.role == "admin" %}
         <a href="/analytics/">Analytics</a>
       {% endif %}
-      <a href="/accounts/logout/">Logout</a>
+      <a href="/accounts/logout/" class="nav-logout">Logout</a>
     {% else %}
       <a href="/accounts/login/">Login</a>
       <a href="/accounts/register/">Register</a>
     {% endif %}
   </div>
+  <button class="nav-hamburger" id="navToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<script>
+  document.getElementById('navToggle').addEventListener('click', function() {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+</script>

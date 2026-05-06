@@ -1,7 +1,10 @@
 {% extends "base.html" %}
+{% block title %}Access Denied — Thesis Portal{% endblock %}
 {% block content %}
-<div class="card">
-  <h2>Unauthorized</h2>
-  <p>You don't have access to this page.</p>
+<div style="text-align:center; padding:80px 24px;">
+  <div style="font-size:4rem; margin-bottom:16px;">🔒</div>
+  <h2 style="margin-bottom:10px;">Access Denied</h2>
+  <p style="margin-bottom:28px;">You don't have permission to view this page.</p>
+  <a class="btn" href="/">Go Home</a>
 </div>
 {% endblock %}

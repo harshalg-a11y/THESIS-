@@ -1,15 +1,30 @@
 {% extends "base.html" %}
+{% block title %}Notifications — Thesis Portal{% endblock %}
 {% block content %}
-<h2>Notifications</h2>
+<div class="page-header">
+  <h2>Notifications</h2>
+  <p>Stay updated on your thesis activity</p>
+</div>
+
 <div class="card-list">
   {% for note in notifications %}
-    <div class="card {% if not note.is_read %}highlight{% endif %}">
-      <h4>{{ note.title }}</h4>
-      <p>{{ note.body }}</p>
-      <a class="btn ghost" href="/notifications/{{ note.id }}/read/">Mark Read</a>
+    <div class="notification-card {% if not note.is_read %}unread{% endif %}">
+      <div class="notification-dot {% if note.is_read %}read{% endif %}"></div>
+      <div class="notification-body">
+        <h4>{{ note.title }}</h4>
+        <p>{{ note.body }}</p>
+        {% if not note.is_read %}
+          <a class="btn ghost sm" href="/notifications/{{ note.id }}/read/">Mark as Read</a>
+        {% else %}
+          <span class="badge badge-green">Read</span>
+        {% endif %}
+      </div>
     </div>
   {% empty %}
-    <div class="card">No notifications.</div>
+    <div class="empty-state">
+      <div class="empty-icon">🔔</div>
+      <p>You're all caught up — no notifications right now.</p>
+    </div>
   {% endfor %}
 </div>
 {% endblock %}

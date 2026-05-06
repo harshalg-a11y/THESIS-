@@ -1,10 +1,18 @@
 {% extends "base.html" %}
+{% block title %}New Request — Thesis Portal{% endblock %}
 {% block content %}
-<div class="card">
-  <h2>New Thesis Request</h2>
-  <form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn">Create Request</button>
-  </form>
+<div class="form-wrapper" style="max-width: 600px;">
+  <div class="form-card">
+    <h2>New Thesis Request</h2>
+    <p class="form-subtitle">Fill in the details below to submit your thesis request</p>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="form-actions">
+        <button class="btn">Submit Request</button>
+      </div>
+    </form>
+    <p class="form-footer"><a href="/requests/">← Back to Requests</a></p>
+  </div>
 </div>
 {% endblock %}
