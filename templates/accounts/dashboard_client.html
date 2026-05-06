@@ -1,11 +1,63 @@
 {% extends "base.html" %}
+{% block title %}Client Dashboard — Thesis Portal{% endblock %}
 {% block content %}
-<div class="card">
-  <h2>Client Dashboard</h2>
-  <p>Start new requests, track status, and chat with your writer.</p>
+
+<div class="page-header fade-in">
+  <h2><i class="fa-solid fa-gauge" style="margin-right:10px;font-size:1.4rem;"></i>Client Dashboard</h2>
   <div class="actions">
-    <a class="btn" href="/requests/new/">New Request</a>
-    <a class="btn ghost" href="/messages/">Messages</a>
+    <a class="btn" href="/requests/new/"><i class="fa-solid fa-plus"></i> New Request</a>
+    <a class="btn ghost" href="/messages/"><i class="fa-solid fa-comments"></i> Messages</a>
   </div>
 </div>
+
+<div class="dash-stats fade-in delay-1">
+  <div class="dash-stat">
+    <div class="ds-num">—</div>
+    <div class="ds-label">Active Requests</div>
+  </div>
+  <div class="dash-stat">
+    <div class="ds-num">—</div>
+    <div class="ds-label">Unread Messages</div>
+  </div>
+  <div class="dash-stat">
+    <div class="ds-num">—</div>
+    <div class="ds-label">Notifications</div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card fade-in delay-2">
+    <h3><i class="fa-solid fa-file-lines" style="margin-right:8px;"></i>My Requests</h3>
+    <p>View and manage all your thesis submission requests.</p>
+    <div class="actions">
+      <a class="btn" href="/requests/"><i class="fa-solid fa-list"></i> View All</a>
+      <a class="btn ghost" href="/requests/new/"><i class="fa-solid fa-plus"></i> New</a>
+    </div>
+  </div>
+
+  <div class="card fade-in delay-3">
+    <h3><i class="fa-solid fa-comments" style="margin-right:8px;"></i>Messages</h3>
+    <p>Chat in real-time with your assigned writer.</p>
+    <div class="actions">
+      <a class="btn" href="/messages/"><i class="fa-solid fa-inbox"></i> Open Inbox</a>
+    </div>
+  </div>
+
+  <div class="card fade-in delay-4">
+    <h3><i class="fa-solid fa-bell" style="margin-right:8px;"></i>Notifications</h3>
+    <p>Stay up to date with all project activity.</p>
+    <div class="actions">
+      <a class="btn ghost" href="/notifications/"><i class="fa-solid fa-bell"></i> View All</a>
+    </div>
+  </div>
+
+  <div class="card fade-in delay-5">
+    <h3><i class="fa-solid fa-credit-card" style="margin-right:8px;"></i>Payments</h3>
+    <p>Track invoices and payment status for your requests.</p>
+    <div class="actions">
+      <a class="btn ghost" href="/payments/"><i class="fa-solid fa-receipt"></i> View</a>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

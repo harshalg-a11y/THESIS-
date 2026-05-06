@@ -1,23 +1,81 @@
 {% extends "base.html" %}
-{% block content %}
+{% block title %}ThesisPortal — Academic Collaboration Platform{% endblock %}
+
+{% block full_content %}
 <section class="hero">
-  <div>
-    <h1>Premium Thesis Management</h1>
-    <p>Elegant workflow for clients, writers, and administrators with everything in one place.</p>
+  <div class="fade-in">
+    <span class="hero-eyebrow">✦ Premium Academic Platform</span>
+    <h1>
+      Your thesis.<br>
+      <span class="grad">Expertly managed.</span><br>
+      On time, every time.
+    </h1>
+    <p>
+      Connect with top-tier academic writers, track milestones in real-time,
+      and get your thesis delivered with zero stress.
+    </p>
     <div class="hero-actions">
-      <a class="btn" href="/accounts/register/">Get Started</a>
-      <a class="btn ghost" href="/accounts/login/">Sign In</a>
+      <a class="btn lg" href="/accounts/register/">
+        <i class="fa-solid fa-rocket"></i> Get Started Free
+      </a>
+      <a class="btn ghost lg" href="/accounts/login/">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In
+      </a>
     </div>
   </div>
-  <div class="hero-card">
-    <h3>What you get</h3>
+
+  <div class="hero-card fade-in delay-2">
+    <h3>✦ Everything you need</h3>
     <ul>
-      <li>Requests & milestones</li>
-      <li>File uploads</li>
-      <li>Live messaging</li>
-      <li>Notifications</li>
-      <li>Analytics</li>
+      <li>Submit &amp; track thesis requests</li>
+      <li>Milestone-based project management</li>
+      <li>Secure file uploads &amp; attachments</li>
+      <li>Real-time messaging with writers</li>
+      <li>Smart notification system</li>
+      <li>Admin analytics &amp; insights</li>
     </ul>
+    <div style="margin-top:28px;padding-top:20px;border-top:1px solid var(--glass-border);">
+      <div style="display:flex;gap:24px;">
+        <div style="text-align:center;">
+          <div style="font-size:1.6rem;font-weight:900;background:var(--grad-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">500+</div>
+          <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">Students</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:1.6rem;font-weight:900;background:var(--grad-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">98%</div>
+          <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">Satisfaction</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:1.6rem;font-weight:900;background:var(--grad-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">24h</div>
+          <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">Support</div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
+
+<!-- Features row -->
+<div style="max-width:1200px;margin:0 auto;padding:0 40px 80px;">
+  <div class="grid">
+    <div class="card fade-in delay-1" style="text-align:center;padding:32px 24px;">
+      <div style="font-size:2rem;margin-bottom:14px;">🎯</div>
+      <h3 style="font-size:1rem;margin-bottom:8px;">Request Management</h3>
+      <p>Submit your thesis brief and get matched with the perfect writer in minutes.</p>
+    </div>
+    <div class="card fade-in delay-2" style="text-align:center;padding:32px 24px;">
+      <div style="font-size:2rem;margin-bottom:14px;">💬</div>
+      <h3 style="font-size:1rem;margin-bottom:8px;">Live Messaging</h3>
+      <p>Communicate directly with your writer through our real-time chat system.</p>
+    </div>
+    <div class="card fade-in delay-3" style="text-align:center;padding:32px 24px;">
+      <div style="font-size:2rem;margin-bottom:14px;">📈</div>
+      <h3 style="font-size:1rem;margin-bottom:8px;">Progress Tracking</h3>
+      <p>Visual milestones and status updates keep you in the loop at every step.</p>
+    </div>
+    <div class="card fade-in delay-4" style="text-align:center;padding:32px 24px;">
+      <div style="font-size:2rem;margin-bottom:14px;">🔒</div>
+      <h3 style="font-size:1rem;margin-bottom:8px;">Secure &amp; Private</h3>
+      <p>Your data and documents are encrypted and protected at all times.</p>
+    </div>
+  </div>
+</div>
 {% endblock %}

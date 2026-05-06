@@ -1,10 +1,129 @@
 {% extends "base.html" %}
-{% block content %}
-<div class="card">
-  <h2>Login</h2>
-  <form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn" type="submit">Login</button>
-  </form>
+{% block title %}Sign In — Thesis Portal{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="/static/css/auth.css">{% endblock %}
+
+{% block full_content %}
+<div class="auth-page">
+
+  <!-- Left illustrative panel -->
+  <div class="auth-panel">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="auth-panel-content">
+      <div class="auth-brand">
+        <i class="fa-solid fa-graduation-cap"></i> ThesisPortal
+      </div>
+
+      <h2>
+        Your academic<br>
+        success starts<br>
+        <span class="highlight">right here.</span>
+      </h2>
+      <p>
+        Connect with expert writers, track milestones,
+        and get your thesis done — stress-free.
+      </p>
+
+      <ul class="auth-features">
+        <li>
+          <span class="feat-icon">✦</span>
+          Real-time messaging with your writer
+        </li>
+        <li>
+          <span class="feat-icon">📋</span>
+          Milestone tracking &amp; file uploads
+        </li>
+        <li>
+          <span class="feat-icon">🔔</span>
+          Smart notifications, zero missed updates
+        </li>
+        <li>
+          <span class="feat-icon">📊</span>
+          Analytics &amp; full project oversight
+        </li>
+      </ul>
+
+      <div class="auth-quote">
+        <p>"ThesisPortal saved me months of stress. The writer communication is seamless."</p>
+        <div class="quote-author">— Priya S., Grad Student</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right form panel -->
+  <div class="auth-form-panel">
+    <div class="auth-form-wrap">
+
+      <div class="auth-form-header">
+        <span class="eyebrow">Welcome back</span>
+        <h1>Sign in to your<br>account</h1>
+        <p>Don't have an account? <a href="/accounts/register/" style="color:var(--primary-lt);font-weight:700;text-decoration:none;">Create one free →</a></p>
+      </div>
+
+      {% if form.non_field_errors %}
+        <div class="non-field-errors">
+          {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="auth-progress"><div class="auth-progress-bar"></div></div>
+
+      <form method="post" class="auth-submit-form">
+        {% csrf_token %}
+        <div class="auth-field">
+          <label for="{{ form.username.id_for_label }}">Username</label>
+          <div class="input-wrap">
+            <input
+              type="text"
+              id="{{ form.username.id_for_label }}"
+              name="username"
+              placeholder="Enter your username"
+              value="{{ form.username.value|default:'' }}"
+              autocomplete="username"
+              required
+            >
+            <i class="fa-solid fa-user input-icon"></i>
+          </div>
+          {% for error in form.username.errors %}<div class="field-error"><i class="fa-solid fa-circle-exclamation"></i> {{ error }}</div>{% endfor %}
+        </div>
+
+        <div class="auth-field">
+          <label for="{{ form.password.id_for_label }}">Password</label>
+          <div class="input-wrap" style="position:relative;">
+            <input
+              type="password"
+              id="{{ form.password.id_for_label }}"
+              name="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            >
+            <i class="fa-solid fa-lock input-icon"></i>
+            <button type="button" class="pwd-toggle"><i class="fa-solid fa-eye"></i></button>
+          </div>
+          {% for error in form.password.errors %}<div class="field-error"><i class="fa-solid fa-circle-exclamation"></i> {{ error }}</div>{% endfor %}
+        </div>
+
+        <div class="auth-checkbox-row">
+          <label>
+            <input type="checkbox" name="remember"> Remember me
+          </label>
+          <a href="#">Forgot password?</a>
+        </div>
+
+        <button class="auth-submit" type="submit">
+          <i class="fa-solid fa-arrow-right-to-bracket" style="margin-right:8px;"></i>
+          Sign In
+        </button>
+      </form>
+
+      <div class="auth-or">or</div>
+
+      <div class="auth-footer">
+        New here? <a href="/accounts/register/">Create a free account</a>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
