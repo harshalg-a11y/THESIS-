@@ -1,26 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Thesis Portal{% endblock %}</title>
-  <link rel="stylesheet" href="/static/css/styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Thesis Management System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="{% block body_class %}{% endblock %}">
-  {% include "partials/nav.html" %}
-  {% if messages %}
-    <div class="container" style="padding-bottom:0">
-      {% for message in messages %}
-        <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
-      {% endfor %}
+<body>
+    {% if session.get('user_id') %}
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-logo">THESIS PORTAL</div>
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('dashboard') }}" class="nav-item {% if request.path == url_for('dashboard') %}active{% endif %}">
+                    <span>Dashboard</span>
+                </a>
+                {% if session.get('role') == 'receiver' %}
+                <a href="{{ url_for('lounge') }}" class="nav-item {% if request.path == url_for('lounge') %}active{% endif %}">
+                    <span>Student Lounge</span>
+                </a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}" class="nav-item">
+                    <span>Logout</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5)">Logged in as {{ session.get('username') }}</p>
+            </div>
+        </aside>
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
     </div>
-  {% endif %}
-  <main class="{% block main_class %}container{% endblock %}">
-    {% block content %}{% endblock %}
-  </main>
-  <script src="/static/js/app.js"></script>
+    {% else %}
+        {% block auth_content %}{% endblock %}
+    {% endif %}
+
+    <div id="guideline-toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;"></div>
+
+    <!-- Side Drawer for Guidelines -->
+    <div id="side-drawer" class="glass-card" style="position: fixed; top: 0; right: -500px; width: 500px; height: 100vh; border-radius: 0; z-index: 10000; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 50px; background: white;">
+        <button onclick="closeDrawer()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+        <h2 style="margin-bottom: 30px; font-weight: 800;">Academic Guideline</h2>
+        <div id="drawer-content" style="line-height: 1.8; color: #475569; font-size: 1.1rem;"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        let lastGuidelineId = 0;
+        function checkGuidelines() {
+            fetch('/api/guidelines')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const latest = data[0];
+                        if (latest.id > lastGuidelineId) {
+                            if (lastGuidelineId !== 0) {
+                                showGuidelineToast(latest.content);
+                            }
+                            lastGuidelineId = latest.id;
+                        }
+                    }
+                });
+        }
+        function showGuidelineToast(content) {
+            const container = document.getElementById('guideline-toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'glass-card animate-fade-in';
+            toast.style.padding = '20px';
+            toast.style.background = '#4361EE';
+            toast.style.color = 'white';
+            toast.style.width = '320px';
+            toast.style.cursor = 'pointer';
+            toast.style.boxShadow = '0 20px 40px rgba(67, 97, 238, 0.3)';
+            toast.onclick = () => showGuidelineDrawer(content);
+            toast.innerHTML = `
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div style="background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 100-16 8 8 0 000 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/></svg>
+                    </div>
+                    <div>
+                        <div style="font-weight: 800; font-size: 0.9rem;">New Guideline Push</div>
+                        <div style="font-size: 0.8rem; opacity: 0.9;">Click to view details</div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                if(toast.parentNode) {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(100px)';
+                    setTimeout(() => toast.remove(), 500);
+                }
+            }, 8000);
+        }
+
+        function showGuidelineDrawer(content) {
+            document.getElementById('drawer-content').innerText = content;
+            document.getElementById('side-drawer').style.right = '0';
+        }
+
+        function closeDrawer() {
+            document.getElementById('side-drawer').style.right = '-500px';
+        }
+        {% if session.get('user_id') %}
+        setInterval(checkGuidelines, 10000);
+        {% endif %}
+    </script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>

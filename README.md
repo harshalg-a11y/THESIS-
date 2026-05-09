@@ -1,41 +1,37 @@
-# Thesis Portal
+# Thesis Portal (Flask Edition)
 
-A feature-rich multi-portal thesis website with:
-- Client portal
-- Writer portal
-- Admin portal
-- Client–Writer messaging
-- Thesis requests & milestones
-- File uploads
-- Notifications
-- Analytics dashboard
+A visually stunning, ultra-modern Thesis Management System built with Flask and MySQL.
+
+## Features
+- **Apple-Standard UI:** Minimalist luxury with Glassmorphism and Mesh Gradients.
+- **Role-Based Portals:** Dedicated environments for Admin, Students, and Experts.
+- **Nexus Chat Hub:** 3-pane real-time communication interface with file sharing.
+- **Supreme Randomizer Engine v2:** Intelligent load-balancing using Weighted Load Scores.
+- **Security First:** SHA-256 password hashing, IDOR protection, and XSS prevention.
 
 ## Setup
 
 ```bash
-python -m venv venv
-source venv/bin/activate   # or venv\Scripts\activate on Windows
-pip install -r requirements.txt
+pip install Flask pymysql
 ```
 
-## MySQL Setup
+### MySQL Setup
+1. Create a database `thesis_portal`.
+2. Apply `mysql_schema.sql`.
+3. Set environment variables:
+   - `DB_TYPE=mysql`
+   - `DB_HOST=localhost`
+   - `DB_USER=root`
+   - `DB_PASS=your_password`
+   - `DB_NAME=thesis_portal`
 
-Create a database:
-```sql
-CREATE DATABASE thesis_portal;
-```
-
-Update `thesis_portal/settings.py` with your MySQL credentials.
-
-## Run
-
+### Local Development (SQLite)
+Just run:
 ```bash
-python manage.py makemigrations
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver
+python app.py
 ```
 
-Go to:
-- http://127.0.0.1:8000/
-- Admin: http://127.0.0.1:8000/admin
+## Credentials (Seeded)
+- Admin: `admin` / `admin123`
+- Student: `user1` / `user123`
+- Experts: `sender1`, `sender2` / `sender123`

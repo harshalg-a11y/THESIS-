@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="animate-fade-in" style="height: calc(100vh - 80px); display: flex; flex-direction: column;">
+    <header style="margin-bottom: 20px;">
+        <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--text-slate);">Student Lounge</h1>
+        <p style="color: #64748B;">Connect with other students. Share tips and academic advice.</p>
+    </header>
+
+    <div class="glass-card" style="flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; margin-bottom: 20px;">
+        <div id="lounge-messages" style="flex-grow: 1; overflow-y: auto; padding: 30px; display: flex; flex-direction: column; gap: 15px;">
+        </div>
+
+        <div style="padding: 20px; border-top: 1px solid rgba(0,0,0,0.05); background: rgba(255,255,255,0.3); display: flex; gap: 15px;">
+            <input type="text" id="lounge-msg-input" placeholder="Say something to the community..." style="flex-grow: 1;" onkeypress="if(event.key === 'Enter') sendLoungeMessage()">
+            <button class="btn btn-primary" onclick="sendLoungeMessage()">Post</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.lounge-bubble {
+    max-width: 80%;
+    padding: 15px;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+.lounge-author {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary-accent);
+    margin-bottom: 5px;
+}
+</style>
+
+<script>
+const currentUserId = {{ session.user_id }};
+
+function loadLounge() {
+    fetch('/api/lounge')
+        .then(res => res.json())
+        .then(messages => {
+            const container = document.getElementById('lounge-messages');
+            const atBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 100;
+
+            container.innerHTML = '';
+            messages.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = 'lounge-bubble';
+                if (msg.sender_id === currentUserId) div.style.borderColor = 'var(--primary-accent)';
+
+                const authorDiv = document.createElement('div');
+                authorDiv.className = 'lounge-author';
+                authorDiv.innerText = msg.full_name;
+
+                const textDiv = document.createElement('div');
+                textDiv.className = 'lounge-text';
+                textDiv.innerText = msg.content;
+
+                div.appendChild(authorDiv);
+                div.appendChild(textDiv);
+                container.appendChild(div);
+            });
+
+            if (atBottom) container.scrollTop = container.scrollHeight;
+        });
+}
+
+function sendLoungeMessage() {
+    const input = document.getElementById('lounge-msg-input');
+    const content = input.value.trim();
+    if (!content) return;
+
+    fetch('/api/lounge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: content })
+    }).then(res => res.json()).then(data => {
+        input.value = '';
+        loadLounge();
+    });
+}
+
+loadLounge();
+setInterval(loadLounge, 5000);
+</script>
+{% endblock %}

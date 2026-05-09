@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="animate-fade-in">
+    <header style="margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--text-slate);">My Thesis</h1>
+            <p style="color: #64748B;">Manage your thesis requests and track progress.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openRequestModal()">Request New Thesis</button>
+    </header>
+
+    <div class="dashboard-grid" id="thesis-list">
+        {% for req in requests %}
+        <div class="glass-card" style="padding: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
+                <h3 style="font-weight: 700;">{{ req.title }}</h3>
+                <span style="padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; background: #E0E7FF; color: #4361EE;">
+                    {{ req.status|upper }}
+                </span>
+            </div>
+            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px; height: 3.6rem; overflow: hidden;">{{ req.description }}</p>
+
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.05);">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: #CBD5E1; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: white;">
+                    {{ (req.expert_name or '?')[0] }}
+                </div>
+                <div style="font-size: 0.85rem;">
+                    <p style="font-weight: 600;">{{ req.expert_name or 'Assigning...' }}</p>
+                    <p style="color: #94A3B8;">Expert</p>
+                </div>
+            </div>
+
+            <a href="/chat/{{ req.id }}" class="btn btn-primary" style="width: 100%;">Open Chat Hub</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Request Modal -->
+<div id="request-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center;">
+    <div class="glass-card animate-fade-in" style="width: 500px; padding: 40px; position: relative;">
+        <h2 style="margin-bottom: 30px;">New Thesis Request</h2>
+        <div class="input-group">
+            <label>Thesis Title</label>
+            <input type="text" id="req-title" placeholder="e.g. AI in Modern Healthcare">
+        </div>
+        <div class="input-group">
+            <label>Description</label>
+            <textarea id="req-desc" rows="4" placeholder="Describe your thesis requirements..."></textarea>
+        </div>
+
+        <div id="assignment-loader" style="display: none; text-align: center; margin-bottom: 20px;">
+            <div class="spinner" style="width: 40px; height: 40px; border: 4px solid rgba(67, 97, 238, 0.1); border-top-color: var(--primary-accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px;"></div>
+            <p>Analyzing Expert Load & Assigning Best Match...</p>
+        </div>
+
+        <div id="assignment-reveal" style="display: none; text-align: center; margin-bottom: 20px; color: var(--success-mint);">
+            <p style="font-size: 1.2rem; font-weight: 700;">🎉 Expert Assigned!</p>
+            <p id="assigned-expert-name" style="font-weight: 600;"></p>
+        </div>
+
+        <div style="display: flex; gap: 15px; margin-top: 30px;">
+            <button class="btn btn-primary" id="submit-req-btn" onclick="submitRequest()" style="flex: 2;">Submit & Assign</button>
+            <button class="btn" onclick="closeRequestModal()" style="flex: 1; background: #E2E8F0;">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script>
+function openRequestModal() {
+    document.getElementById('request-modal').style.display = 'flex';
+}
+
+function closeRequestModal() {
+    document.getElementById('request-modal').style.display = 'none';
+    document.getElementById('assignment-loader').style.display = 'none';
+    document.getElementById('assignment-reveal').style.display = 'none';
+    document.getElementById('submit-req-btn').style.display = 'block';
+}
+
+function submitRequest() {
+    const title = document.getElementById('req-title').value;
+    const desc = document.getElementById('req-desc').value;
+    if (!title || !desc) return;
+
+    document.getElementById('submit-req-btn').style.display = 'none';
+    document.getElementById('assignment-loader').style.display = 'block';
+
+    fetch('/api/requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: title, description: desc })
+    }).then(res => res.json()).then(data => {
+        setTimeout(() => {
+            document.getElementById('assignment-loader').style.display = 'none';
+            document.getElementById('assignment-reveal').style.display = 'block';
+            document.getElementById('assigned-expert-name').innerText = data.expert_name;
+
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        }, 3000);
+    });
+}
+</script>
+{% endblock %}

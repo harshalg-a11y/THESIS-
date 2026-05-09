@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="animate-fade-in">
+    <header style="margin-bottom: 40px;">
+        <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--text-slate);">Expert Dashboard</h1>
+        <p style="color: #64748B;">Active thesis projects assigned to you.</p>
+    </header>
+
+    <div class="dashboard-grid">
+        {% for req in requests %}
+        <div class="glass-card" style="padding: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
+                <h3 style="font-weight: 700;">{{ req.title }}</h3>
+                <span style="padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; background: #D1FAE5; color: #065F46;">
+                    {{ req.status|upper }}
+                </span>
+            </div>
+            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">{{ req.description }}</p>
+
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.05);">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: #4361EE; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: white;">
+                    {{ req.student_name[0] }}
+                </div>
+                <div style="font-size: 0.85rem;">
+                    <p style="font-weight: 600;">{{ req.student_name }}</p>
+                    <p style="color: #94A3B8;">Student</p>
+                </div>
+            </div>
+
+            <a href="/chat/{{ req.id }}" class="btn btn-primary" style="width: 100%;">Open Discussion Hub</a>
+        </div>
+        {% endfor %}
+
+        {% if not requests %}
+        <p style="color: #94A3B8;">No active assignments. Waiting for new requests...</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

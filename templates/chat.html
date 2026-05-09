@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="nexus-layout animate-fade-in">
+    <!-- Pane 1: Contacts/Info -->
+    <aside class="nexus-pane nexus-sidebar">
+        <div class="pane-header">
+            <h3>Project Info</h3>
+        </div>
+        <div class="pane-content">
+            <div class="info-card glass-card">
+                <p class="label">Thesis Title</p>
+                <p class="value">{{ thesis.title }}</p>
+                <p class="label">Status</p>
+                <span class="badge badge-success">{{ thesis.status|upper }}</span>
+            </div>
+            <div class="info-card glass-card">
+                <p class="label">Assigned Expert</p>
+                <div class="user-pill">
+                    <div class="avatar">{{ other_party.full_name[0] }}</div>
+                    <div>
+                        <p class="name">{{ other_party.full_name }}</p>
+                        <p class="role">Academic Specialist</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Pane 2: Active Chat -->
+    <main class="nexus-pane nexus-chat">
+        <div class="pane-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="status-indicator"></div>
+                <h3>Active Discussion</h3>
+            </div>
+            <div id="typing-indicator" style="display: none; font-size: 0.8rem; color: var(--primary-accent);">
+                {{ other_party.full_name }} is typing...
+            </div>
+        </div>
+        <div id="chat-messages" class="chat-container">
+            <!-- Messages load here -->
+        </div>
+        <div class="chat-input-area">
+            <div class="input-wrapper">
+                <input type="text" id="msg-input" placeholder="Type a message..." onkeypress="handleKeyPress(event)" oninput="notifyTyping()">
+                <button class="send-btn" onclick="sendMessage()">
+                    <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Pane 3: Guidelines/Files -->
+    <aside class="nexus-pane nexus-files">
+        <div class="pane-header">
+            <h3>Resources</h3>
+        </div>
+        <div class="pane-content">
+            <div class="resource-section">
+                <h4>Guidelines</h4>
+                <div id="guideline-list" class="mini-list">
+                    <!-- Guidelines load here -->
+                </div>
+            </div>
+            <div class="resource-section">
+                <h4>Shared Files</h4>
+                <div id="file-list" class="mini-list">
+                    <div class="empty-state">
+                        <p>No files shared yet.</p>
+                    </div>
+                </div>
+                <div style="margin-top: 15px;">
+                    <input type="file" id="file-upload" style="display: none;" onchange="uploadFile()">
+                    <button class="btn btn-primary" style="width: 100%; font-size: 0.8rem; padding: 8px;" onclick="document.getElementById('file-upload').click()">Upload File</button>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<style>
+.nexus-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr 300px;
+    height: calc(100vh - 80px);
+    gap: 20px;
+}
+
+.nexus-pane {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.pane-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pane-header h3 {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.pane-content {
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.info-card {
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 16px;
+}
+
+.label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94A3B8;
+    margin-bottom: 4px;
+}
+
+.value {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.user-pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--primary-accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
+
+.chat-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: #F8F9FB;
+}
+
+.chat-input-area {
+    padding: 20px;
+    background: white;
+}
+
+.input-wrapper {
+    display: flex;
+    background: #F1F5F9;
+    border-radius: 16px;
+    padding: 8px 8px 8px 20px;
+    align-items: center;
+}
+
+.input-wrapper input {
+    border: none;
+    background: transparent;
+    padding: 10px 0;
+}
+
+.input-wrapper input:focus {
+    box-shadow: none;
+}
+
+.send-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--primary-accent);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.send-btn:hover {
+    transform: scale(1.05);
+}
+
+.message-bubble {
+    padding: 12px 16px;
+    border-radius: 18px;
+    max-width: 80%;
+    font-size: 0.95rem;
+    position: relative;
+}
+
+.msg-sender {
+    align-self: flex-end;
+    background: var(--primary-accent);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.msg-receiver {
+    align-self: flex-start;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-bottom-left-radius: 4px;
+}
+
+.verified-badge {
+    font-size: 0.6rem;
+    background: #F59E0B;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+</style>
+
+<script>
+const requestId = {{ thesis.id }};
+const currentUserId = {{ session.user_id }};
+let isTyping = false;
+let typingTimeout;
+
+function loadMessages() {
+    fetch(`/api/messages/${requestId}`)
+        .then(res => res.json())
+        .then(messages => {
+            const container = document.getElementById('chat-messages');
+            container.innerHTML = '';
+            messages.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = 'message-bubble ' + (msg.sender_id === currentUserId ? 'msg-sender' : 'msg-receiver');
+
+                div.innerText = msg.content;
+                if (msg.role === 'admin') {
+                    const badge = document.createElement('span');
+                    badge.className = 'verified-badge';
+                    badge.innerText = 'VERIFIED ADMIN';
+                    div.appendChild(badge);
+                }
+
+                container.appendChild(div);
+            });
+            container.scrollTop = container.scrollHeight;
+        });
+}
+
+function sendMessage() {
+    const input = document.getElementById('msg-input');
+    const content = input.value.trim();
+    if (!content) return;
+
+    fetch(`/api/messages/${requestId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: content })
+    }).then(() => {
+        input.value = '';
+        loadMessages();
+    });
+}
+
+function handleKeyPress(e) {
+    if (e.key === 'Enter') sendMessage();
+}
+
+function notifyTyping() {
+    // In a real socket app, we'd emit an event. Here we just simulate or prepare for it.
+    console.log("Typing...");
+}
+
+function loadGuidelines() {
+    fetch('/api/guidelines')
+        .then(res => res.json())
+        .then(data => {
+            const list = document.getElementById('guideline-list');
+            list.innerHTML = data.map(g => `
+                <div class="glass-card" style="padding: 10px; margin-bottom: 10px; font-size: 0.8rem; cursor: pointer;" onclick="openGuideline('${g.content.replace(/'/g, "\\'")}')">
+                    ${g.content.substring(0, 40)}...
+                </div>
+            `).join('');
+        });
+}
+
+function openGuideline(content) {
+    // This will be handled by the side-drawer in base.html
+    showGuidelineDrawer(content);
+}
+
+function loadFiles() {
+    fetch(`/api/files/${requestId}`)
+        .then(res => res.json())
+        .then(data => {
+            const list = document.getElementById('file-list');
+            if (data.length === 0) {
+                list.innerHTML = '<div class="empty-state"><p>No files shared yet.</p></div>';
+                return;
+            }
+            list.innerHTML = data.map(f => `
+                <div class="glass-card" style="padding: 10px; margin-bottom: 10px; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 150px;">${f.original_name}</span>
+                    <a href="/download/${f.uuid}" class="btn-primary" style="padding: 4px 8px; border-radius: 6px; text-decoration: none; font-size: 0.7rem;">Get</a>
+                </div>
+            `).join('');
+        });
+}
+
+function uploadFile() {
+    const fileInput = document.getElementById('file-upload');
+    if (fileInput.files.length === 0) return;
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+
+    fetch(`/api/files/${requestId}`, {
+        method: 'POST',
+        body: formData
+    }).then(res => res.json()).then(data => {
+        if (data.success) {
+            loadFiles();
+            fileInput.value = '';
+        }
+    });
+}
+
+loadMessages();
+loadFiles();
+loadGuidelines();
+setInterval(loadMessages, 3000);
+</script>
+{% endblock %}
