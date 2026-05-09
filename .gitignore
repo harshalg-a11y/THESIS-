@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.env
+.flaskenv
+thesis_portal.db
+uploads/
+verification/
+tests.py
+mysql_schema.sql
+README.md
+django_old/
+*.log

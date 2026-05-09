@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="animate-fade-in">
+    <header style="margin-bottom: 40px;">
+        <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--text-slate);">God-View Dashboard</h1>
+        <p style="color: #64748B;">Total system overview and monitoring.</p>
+    </header>
+
+    <div class="dashboard-grid">
+        <div class="glass-card" style="padding: 30px;">
+            <h3 style="color: var(--primary-accent); margin-bottom: 10px;">Active Users</h3>
+            <p style="font-size: 2.5rem; font-weight: 800;">{{ stats.users }}</p>
+        </div>
+        <div class="glass-card" style="padding: 30px;">
+            <h3 style="color: var(--success-mint); margin-bottom: 10px;">Total Thesis</h3>
+            <p style="font-size: 2.5rem; font-weight: 800;">{{ stats.requests }}</p>
+        </div>
+        <div class="glass-card" style="padding: 30px;">
+            <h3 style="color: #F59E0B; margin-bottom: 10px;">Total Messages</h3>
+            <p style="font-size: 2.5rem; font-weight: 800;">{{ stats.messages }}</p>
+        </div>
+    </div>
+
+    <div style="margin-top: 50px;">
+        <h2 style="margin-bottom: 25px;">Global Thesis Management</h2>
+        <div class="glass-card" style="overflow: hidden;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="background: rgba(0,0,0,0.02);">
+                        <th style="padding: 20px;">Title</th>
+                        <th style="padding: 20px;">Student</th>
+                        <th style="padding: 20px;">Expert</th>
+                        <th style="padding: 20px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for req in requests %}
+                    <tr style="border-top: 1px solid rgba(0,0,0,0.05);">
+                        <td style="padding: 20px;">{{ req.title }}</td>
+                        <td style="padding: 20px;">{{ req.student_name }}</td>
+                        <td style="padding: 20px;">{{ req.expert_name or 'Unassigned' }}</td>
+                        <td style="padding: 20px;">
+                            <span style="padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+                                background: {% if req.status == 'pending' %}#FEF3C7{% else %}#D1FAE5{% endif %};
+                                color: {% if req.status == 'pending' %}#92400E{% else %}#065F46{% endif %};">
+                                {{ req.status|upper }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="toggleGuidelinePanel()" style="position: fixed; bottom: 40px; right: 40px; box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);">
+        Push Guideline
+    </button>
+</div>
+
+<div id="guideline-panel" class="glass-card" style="position: fixed; top: 0; right: -400px; width: 400px; height: 100vh; border-radius: 0; transition: right 0.5s ease; z-index: 1000; padding: 40px;">
+    <h2>New Guideline</h2>
+    <div style="margin-top: 30px;">
+        <textarea id="guideline-content" rows="10" placeholder="Type new guidelines for students and experts..." style="margin-bottom: 20px;"></textarea>
+        <button class="btn btn-primary" onclick="pushGuideline()" style="width: 100%;">Broadcast Guideline</button>
+        <button class="btn" onclick="toggleGuidelinePanel()" style="width: 100%; margin-top: 10px; background: #E2E8F0;">Cancel</button>
+    </div>
+</div>
+
+<script>
+function toggleGuidelinePanel() {
+    const panel = document.getElementById('guideline-panel');
+    if (panel.style.right === '0px') {
+        panel.style.right = '-400px';
+    } else {
+        panel.style.right = '0px';
+    }
+}
+
+function pushGuideline() {
+    const content = document.getElementById('guideline-content').value;
+    if (!content) return;
+
+    fetch('/api/guidelines', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: content })
+    }).then(res => res.json()).then(data => {
+        if (data.success) {
+            alert('Guideline pushed successfully!');
+            document.getElementById('guideline-content').value = '';
+            toggleGuidelinePanel();
+        }
+    });
+}
+</script>
+{% endblock %}

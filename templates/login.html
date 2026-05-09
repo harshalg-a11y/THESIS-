@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% block auth_content %}
+<div class="auth-container">
+    <div class="mesh-gradient"></div>
+    <div class="glass-card auth-card animate-fade-in">
+        <div class="auth-header">
+            <h1>Thesis Portal</h1>
+            <p>Academic Excellence Redefined</p>
+        </div>
+
+        <div class="role-selector">
+            <button class="tab-btn active" onclick="setRole('receiver')">Student</button>
+            <button class="tab-btn" onclick="setRole('sender')">Expert</button>
+            <button class="tab-btn" onclick="setRole('admin')">Admin</button>
+        </div>
+
+        <div id="login-form-container">
+            <form action="{{ url_for('login') }}" method="POST">
+                <input type="hidden" name="role" id="role-input" value="receiver">
+                <div class="input-group">
+                    <label>Username</label>
+                    <input type="text" name="username" required placeholder="Enter your identifier">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" name="password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+            </form>
+
+            <div class="auth-divider">
+                <span>or continue with</span>
+            </div>
+
+            <div class="social-auth">
+                <button class="social-btn" title="Sign in with Apple">
+                    <svg viewBox="0 0 384 512" width="20"><path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 21.8-88.5 21.8-11.4 0-53.8-24.3-89.8-23.6-47.5 1-100 29.8-124.5 71.4-48.8 83-16.1 226.8 30.6 294.1 22.8 33 49.3 57.7 81.3 56.6 30.2-1.1 41.1-20.1 79.5-20.1 38.4 0 49.9 20.1 80.1 19.5 31.1-.6 56.3-22.3 78.4-54 26.2-38.1 36.9-74.8 37.1-76.7-1.1-.5-72.2-27.8-72.2-108.3zm-79.6-189.7c15-18.4 25.1-43.9 22.3-69.3-21.9 1-48.5 14.8-64.2 33.1-14.1 16.4-26.5 42.6-23.5 67.2 24.3 1.9 49.4-12.7 65.4-31z"/></svg>
+                </button>
+                <button class="social-btn" title="Sign in with Google">
+                    <svg viewBox="0 0 488 512" width="20"><path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+                </button>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="#" onclick="showOTP()" style="font-size: 0.85rem; color: var(--primary-accent); text-decoration: none; font-weight: 600;">Sign in with Phone OTP</a>
+            </div>
+        </div>
+
+        <div id="otp-form-container" style="display: none;">
+            <div class="input-group">
+                <label>Phone Number</label>
+                <input type="text" placeholder="+1 (555) 000-0000">
+            </div>
+            <button class="btn btn-primary btn-full" onclick="startTimer()">Send Code</button>
+
+            <div id="otp-entry" style="display: none; margin-top: 20px;">
+                <div class="input-group">
+                    <label>Verification Code</label>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <input type="text" maxlength="1" class="otp-digit">
+                        <input type="text" maxlength="1" class="otp-digit">
+                        <input type="text" maxlength="1" class="otp-digit">
+                        <input type="text" maxlength="1" class="otp-digit">
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 10px;">
+                    <span id="timer" style="font-size: 0.85rem; color: #64748B;">Resend in 00:59</span>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="#" onclick="hideOTP()" style="font-size: 0.85rem; color: var(--primary-accent); text-decoration: none; font-weight: 600;">Back to Password</a>
+            </div>
+        </div>
+
+        {% if error %}
+        <p class="error-msg">{{ error }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.auth-container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.mesh-gradient {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+        radial-gradient(at 0% 0%, rgba(67, 97, 238, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(30, 41, 59, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(67, 97, 238, 0.1) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(15, 23, 42, 0.05) 0px, transparent 50%);
+    background-color: #F8F9FB;
+    z-index: -1;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 50px;
+    border-radius: 32px;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.auth-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 5px;
+}
+
+.auth-header p {
+    color: #64748B;
+    font-size: 0.95rem;
+}
+
+.role-selector {
+    display: flex;
+    background: rgba(0,0,0,0.04);
+    padding: 6px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    background: transparent;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    color: #64748B;
+}
+
+.tab-btn.active {
+    background: white;
+    color: var(--primary-accent);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.btn-full {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    margin: 30px 0;
+    color: #94A3B8;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.auth-divider::before, .auth-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #E2E8F0;
+}
+
+.auth-divider span {
+    padding: 0 15px;
+}
+
+.social-auth {
+    display: flex;
+    gap: 15px;
+}
+
+.social-btn {
+    flex: 1;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--text-slate);
+}
+
+.social-btn:hover {
+    background: #F8F9FB;
+    border-color: #CBD5E1;
+    transform: translateY(-2px);
+}
+
+.otp-digit {
+    width: 50px;
+    height: 60px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.error-msg {
+    color: #ef4444;
+    text-align: center;
+    margin-top: 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+</style>
+
+<script>
+function setRole(role) {
+    document.getElementById('role-input').value = role;
+    const buttons = document.querySelectorAll('.tab-btn');
+    buttons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.innerText.toLowerCase().includes(role) ||
+           (role === 'receiver' && btn.innerText === 'Student') ||
+           (role === 'sender' && btn.innerText === 'Expert')) {
+            btn.classList.add('active');
+        }
+    });
+}
+
+function showOTP() {
+    document.getElementById('login-form-container').style.display = 'none';
+    document.getElementById('otp-form-container').style.display = 'block';
+}
+
+function hideOTP() {
+    document.getElementById('login-form-container').style.display = 'block';
+    document.getElementById('otp-form-container').style.display = 'none';
+}
+
+function startTimer() {
+    document.getElementById('otp-entry').style.display = 'block';
+    let seconds = 59;
+    const timerSpan = document.getElementById('timer');
+    const interval = setInterval(() => {
+        seconds--;
+        timerSpan.innerText = `Resend in 00:${seconds.toString().padStart(2, '0')}`;
+        if (seconds <= 0) clearInterval(interval);
+    }, 1000);
+}
+</script>
+{% endblock %}
